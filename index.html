@@ -189,29 +189,53 @@
 </footer>
 
 <script>
+  // ---- Hier Namen eintragen ----
+  // "file" muss zur echten Datei in /sounds/ passen.
+  // "name" ist der Text, der auf dem Pad angezeigt wird.
+  const SOUNDS = [
+    { file: 'sound1.wav',  name: 'Sound 1'  },
+    { file: 'sound2.wav',  name: 'Sound 2'  },
+    { file: 'sound3.wav',  name: 'Sound 3'  },
+    { file: 'sound4.wav',  name: 'Sound 4'  },
+    { file: 'sound5.wav',  name: 'Sound 5'  },
+    { file: 'sound6.wav',  name: 'Sound 6'  },
+    { file: 'sound7.wav',  name: 'Sound 7'  },
+    { file: 'sound8.wav',  name: 'Sound 8'  },
+    { file: 'sound9.wav',  name: 'Sound 9'  },
+    { file: 'sound10.wav', name: 'Sound 10' },
+    { file: 'sound11.wav', name: 'Sound 11' },
+    { file: 'sound12.wav', name: 'Sound 12' },
+    { file: 'sound13.wav', name: 'Sound 13' },
+    { file: 'sound14.wav', name: 'Sound 14' },
+    { file: 'sound15.wav', name: 'Sound 15' },
+    { file: 'sound16.wav', name: 'Sound 16' },
+  ];
+  // -------------------------------
+
   const KEYS = ['1','2','3','4','5','6','7','8','9','0','Q','W','E','R','T','Y'];
   const grid = document.getElementById('grid');
   const pads = [];
 
-  for (let i = 1; i <= 16; i++) {
-    const file = `sounds/sound${i}.wav`;
+  SOUNDS.forEach((sound, idx) => {
+    const i = idx + 1;
+    const file = `sounds/${sound.file}`;
     const audio = new Audio(file);
     audio.preload = 'none';
 
     const pad = document.createElement('button');
     pad.className = 'pad';
-    pad.setAttribute('aria-label', `sound${i}.wav abspielen`);
+    pad.setAttribute('aria-label', `${sound.name} abspielen`);
     pad.innerHTML = `
       <div class="num">${i}</div>
-      <div class="name">sound${i}.wav</div>
-      <div class="key">Taste: ${KEYS[i-1]}</div>
+      <div class="name">${sound.name}</div>
+      <div class="key">Taste: ${KEYS[idx]}</div>
     `;
 
     let failed = false;
     audio.addEventListener('error', () => {
       failed = true;
       pad.classList.add('error');
-      pad.querySelector('.name').innerHTML = `sound${i}.wav <div class="missing">nicht gefunden</div>`;
+      pad.querySelector('.name').innerHTML = `${sound.name} <div class="missing">Datei fehlt: ${sound.file}</div>`;
     });
 
     const play = () => {
@@ -225,8 +249,8 @@
 
     pad.addEventListener('click', play);
     grid.appendChild(pad);
-    pads.push({ audio, play, key: KEYS[i-1] });
-  }
+    pads.push({ audio, play, key: KEYS[idx] });
+  });
 
   document.addEventListener('keydown', (e) => {
     if (e.repeat) return;
